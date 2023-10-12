@@ -1,39 +1,53 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-// import { NavigationScreenProp } from 'react-navigation';
-import { useNavigation } from '@react-navigation/native';
-import {type StackNavigationProp} from '@react-navigation/stack';
+import { View, StyleSheet } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+// import {type StackNavigationProp} from '@react-navigation/stack';
 import { Questionnaire } from 'fhir/r5';
 
-import { EndpT, QEndpoints, RootStackParamList, ScreenNames } from '../constants';
+import { EndpT, QEndpoints } from '../constants';
 import { fetchAllData } from '../mocks/ApiMock';
+import QuestionnairesDropList from "../components/QuestionnairesDropList";
 
 type TItemsQState = [Questionnaire[], React.Dispatch<React.SetStateAction<Questionnaire[]>>];
+type TTListDataState = [TListData[], React.Dispatch<React.SetStateAction<TListData[]>>];
+export type TListData = {
+  title: string | undefined;
+  id: string | undefined;
+}
 
 const QContainer: React.FC = () => {
-  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [itemsQ, setItemsQ]: TItemsQState = useState<Questionnaire[]>([])
 
-  useEffect(() => {
+  const [itemsQ, setItemsQ]: TItemsQState = useState<Questionnaire[]>([])
+  const [itemsListData, setItemsListData]: TTListDataState = useState<TListData[]>([])
+
+  useEffect((): void => {
     const fetchData = async (QEndpoints: EndpT[]): Promise<void> => {
       try {
         const data: Questionnaire[] = await fetchAllData(QEndpoints);
-        console.log('data', data);
+        __DEV__ && console.log('data', data);
+
         setItemsQ(data);
+
+        const listData: TListData[] = data.map((item): TListData => {
+          return { title: item.title, id: item.id };
+        })
+
+        setItemsListData(listData);
+        // TODO dispatch to save to redux
+        // TODO Optional: get mock data in redux-saga
       } catch (error) {
-        console.error('Error fetching fhir data:', error);
+        __DEV__ && console.error('Error fetching fhir data:', error);
       }
     };
 
     fetchData(QEndpoints);
-  }, [])
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Q CONTAINER</Text>
-      <Button
-        title="Go to QForm"
-        onPress={() => navigation.navigate(ScreenNames.QForm)}
+      <QuestionnairesDropList
+        data={itemsListData}
+        header={'Questionnaires'}
       />
     </View>
   );
@@ -42,13 +56,8 @@ const QContainer: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
 });
 

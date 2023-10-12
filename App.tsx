@@ -24,7 +24,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { ScreenNames } from "./src/constants";
+import { RootStackParamList, ScreenNames, ScreenTitleName } from "./src/constants";
 import QContainer from "./src/screens/QContainer";
 import QForm from "./src/screens/QForm";
 
@@ -59,7 +59,7 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.ReactElement {
   const isDarkMode: boolean = useColorScheme() === 'dark';
@@ -69,12 +69,11 @@ function App(): React.ReactElement {
 
   return (
     <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-
       <Stack.Navigator>
         <Stack.Screen
           name={ScreenNames.QContainer}
           component={QContainer}
-          // options={{title: ScreenTitleName.vehicleListScreen}}
+          options={{title: ScreenTitleName.QContainer}}
         />
         <Stack.Screen
           name={ScreenNames.QForm}
@@ -82,7 +81,6 @@ function App(): React.ReactElement {
           // options={{title: ScreenTitleName.vehicleDetailScreen}}
         />
       </Stack.Navigator>
-
     </NavigationContainer>
 
   );
