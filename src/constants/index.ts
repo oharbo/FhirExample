@@ -1,3 +1,4 @@
+
 interface ScreenNamesInt {
   [index: string]: string;
 }
@@ -16,3 +17,8 @@ export type RootStackParamList = {
   [ScreenNames.QContainer]: undefined;
   [ScreenNames.QForm]: undefined;
 };
+
+export type EndpT = 'Q1' | 'Q2' | 'Q3';
+
+export const QEndpoints: EndpT[] = ['Q1', 'Q2', 'Q3'];
+

@@ -1,16 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 // import { NavigationScreenProp } from 'react-navigation';
 import { useNavigation } from '@react-navigation/native';
 import {type StackNavigationProp} from '@react-navigation/stack';
-import { RootStackParamList, ScreenNames } from "../constants";
+import { Questionnaire } from 'fhir/r5';
 
-// interface SimpleScreenProps {
-//   navigation: NavigationScreenProp<any, any>;
-// }
+import { EndpT, QEndpoints, RootStackParamList, ScreenNames } from '../constants';
+import { fetchAllData } from '../mocks/ApiMock';
+
+type TItemsQState = [Questionnaire[], React.Dispatch<React.SetStateAction<Questionnaire[]>>];
 
 const QContainer: React.FC = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const [itemsQ, setItemsQ]: TItemsQState = useState<Questionnaire[]>([])
+
+  useEffect(() => {
+    const fetchData = async (QEndpoints: EndpT[]): Promise<void> => {
+      try {
+        const data: Questionnaire[] = await fetchAllData(QEndpoints);
+        console.log('data', data);
+        setItemsQ(data);
+      } catch (error) {
+        console.error('Error fetching fhir data:', error);
+      }
+    };
+
+    fetchData(QEndpoints);
+  }, [])
 
   return (
     <View style={styles.container}>
