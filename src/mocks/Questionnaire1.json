@@ -1,0 +1,86 @@
+{
+    "questionnaire": {
+        "resourceType": "Questionnaire",
+        "id": "01f41755-888d-4566-baec-5cee8e36bffb",
+        "meta": {
+            "versionId": "9",
+            "lastUpdated": "2022-06-24T00:02:11.494+00:00"
+        },
+        "extension": [
+            {
+                "url": "study_id",
+                "valueString": "org.445123bfb2354585bc40aebd0137320e"
+            }
+        ],
+        "title": "Questionnaire Example 1",
+        "name": "Questionnaire Example 1",
+        "status": "active",
+        "code": [
+            {
+                "system": "questionnaire",
+                "code": "epro",
+                "display": "ePRO"
+            }
+        ],
+        "item": [
+            {
+                "id": "3bec3a54-521d-4b4b-ba05-4b77e3f41f77",
+                "extension": [
+                    {
+                        "url": "builder/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "builder/fhir/questionnaire-item-control",
+                                    "code": "text",
+                                    "display": "Text"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "url": "assistive-text"
+                    }
+                ],
+                "linkId": "3f2b767d-8882-49d7-989d-411385081f2f",
+                "prefix": "3",
+                "text": "Text",
+                "type": "text",
+                "required": true
+            },
+            {
+                "id": "28b694f6-8ec0-42bf-966e-685edd5f8ada",
+                "extension": [
+                    {
+                        "url": "builder/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "builder/fhir/questionnaire-item-control",
+                                    "code": "number",
+                                    "display": "Number"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "url": "assistive-text"
+                    }
+                ],
+                "linkId": "98872862-0d33-4b67-9ec0-0953452f377d",
+                "prefix": "4",
+                "text": "Number",
+                "type": "integer",
+                "enableWhen": [
+                    {
+                        "question": "11661325-7ef6-4722-82d6-e8f41249e8df",
+                        "operator": "exists",
+                        "answerBoolean": true
+                    }
+                ],
+                "enableBehavior": "all",
+                "required": true
+            }
+        ]
+    }
+}

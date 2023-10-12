@@ -1,0 +1,266 @@
+{
+    "questionnaire": {
+        "status": "active",
+        "copyright": "No Copyright",
+        "name": "Some Questionnaire",
+        "title": "Some Questionnaire",
+        "resourceType": "Questionnaire",
+        "meta": {
+            "profile": [
+                "http://hl7.org/fhir/uv/sdc/StructureDefinition/sdc-questionnaire|2.7"
+            ],
+            "tag": [
+                {
+                    "code": "lformsVersion: 29.2.1"
+                }
+            ]
+        },
+        "item": [
+            {
+                "type": "display",
+                "text": "This is an example questionnaire"
+            },
+            {
+                "type": "coding",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "radio-button",
+                                    "display": "Radio Button"
+                                }
+                            ],
+                            "text": "Radio Button"
+                        }
+                    }
+                ],
+                "required": true,
+                "text": "Your mobility TODAY",
+                "answerOption": [
+                    {
+                        "valueCoding": {
+                            "code": "none",
+                            "display": "I have no problems walking"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "slight",
+                            "display": "I have slight problems walking"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "moderate",
+                            "display": "I have moderate problems walking"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "severe",
+                            "display": "I have severe problems walking"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "unable",
+                            "display": "I am unable to walk"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "coding",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "radio-button",
+                                    "display": "Radio Button"
+                                }
+                            ],
+                            "text": "Radio Button"
+                        }
+                    }
+                ],
+                "required": false,
+                "linkId": "Q2",
+                "text": "Your self-care TODAY",
+                "answerOption": [
+                    {
+                        "valueCoding": {
+                            "code": "no",
+                            "display": "I have no problems washing or dressing myself"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "slight",
+                            "display": "I have slight problems washing or dressing myself"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "moderate",
+                            "display": "I have moderate problems washing or dressing myself"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "severe",
+                            "display": "I have severe problems washing or dressing myself"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "unable",
+                            "display": "I am unable to wash or dress myself"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "coding",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "radio-button",
+                                    "display": "Radio Button"
+                                }
+                            ],
+                            "text": "Radio Button"
+                        }
+                    }
+                ],
+                "required": false,
+                "linkId": "Q3",
+                "text": "Your usual activities TODAY<br /><br />(e.g. work, study, housework, family or leisure activities)",
+                "answerOption": [
+                    {
+                        "valueCoding": {
+                            "code": "no",
+                            "display": "I have no problems doing my usual activities"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "slight",
+                            "display": "I have slight problems doing my usual activities"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "moderate",
+                            "display": "I have moderate problems doing my usual activities"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "severe",
+                            "display": "I have severe problems doing my usual activities"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "unable",
+                            "display": "I am unable to do my usual activities"
+                        }
+                    }
+                ]
+            },
+            {
+                "type": "coding",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "radio-button",
+                                    "display": "Radio Button"
+                                }
+                            ],
+                            "text": "Radio Button"
+                        }
+                    }
+                ],
+                "required": false,
+                "linkId": "Q4",
+                "text": "Your pain / discomfort TODAY",
+                "answerOption": [
+                    {
+                        "valueCoding": {
+                            "code": "no",
+                            "display": "I have no pain or discomfort"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "slight",
+                            "display": "I have slight pain or discomfort"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "moderate",
+                            "display": "I have moderate pain or discomfort"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "severe",
+                            "display": "I have severe pain or discomfort"
+                        }
+                    },
+                    {
+                        "valueCoding": {
+                            "code": "extreme",
+                            "display": "I have extreme pain or discomfort"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "4d5d3f8c-1618-469b-b785-80c5750d036e",
+                "extension": [
+                    {
+                        "url": "builder/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "builder/fhir/questionnaire-item-control",
+                                    "code": "text",
+                                    "display": "Text"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "url": "assistive-text"
+                    }
+                ],
+                "linkId": "bf0c504e-1f2b-4ba2-b46a-1fec76939ea1",
+                "prefix": "1",
+                "text": "Text Entry Single Line",
+                "type": "text",
+                "required": true,
+                "maxLength": 10
+            },
+            {
+                "type": "display",
+                "text": "You have now completed this questionnaire.<br /> If you would like to change any of your answers, you may do so by pressing the \"Previous\" button prior to finalizing the questionnaire.<br />Please finalize the questionnaire by pressing the ”Finalize\" button. Once you press ”Finalize\", you will not be able to go back to review or change your answers."
+            }
+        ]
+    }
+}

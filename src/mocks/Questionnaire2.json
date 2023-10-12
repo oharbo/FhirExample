@@ -1,0 +1,319 @@
+{
+    "questionnaire": {
+        "resourceType": "Questionnaire",
+        "id": "432a402c-5265-406b-89e7-8933af905d27",
+        "meta": {
+            "versionId": "2",
+            "lastUpdated": "2022-09-01T20:26:34.511+00:00"
+        },
+        "extension": [
+            {
+                "url": "study_id",
+                "valueString": "org.4351307a32cb4fddba80aefc00fc8ecc"
+            }
+        ],
+        "title": "Quantity Form",
+        "status": "active",
+        "code": [
+            {
+                "system": "questionnaire",
+                "code": "epro",
+                "display": "ePRO"
+            }
+        ],
+        "item": [
+            {
+                "id": "98289cd1-3df2-4f58-868c-bb3457cddab7",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Weight Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 2
+                    },
+                    {
+                        "url": "minValue",
+                        "valueDecimal": 0
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "g"
+                    }
+                ],
+                "linkId": "458c3a49-ac33-4ccc-8b1b-f7c8e522c5a2",
+                "text": "Weight Quantity",
+                "type": "quantity",
+                "required": true
+            },
+            {
+                "id": "46852032-84ac-4840-a216-ce150408a3a9",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Length Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 0
+                    },
+                    {
+                        "url": "minValue"
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "cm"
+                    }
+                ],
+                "linkId": "d13ee409-3a98-4d36-abd8-5bafe4e9ac34",
+                "text": "Length Quantity",
+                "type": "quantity",
+                "required": true
+            },
+            {
+                "id": "e7d99224-2ef4-44f4-a1cf-8b29b1aff33a",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Volume Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 0
+                    },
+                    {
+                        "url": "minValue"
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "mL"
+                    }
+                ],
+                "linkId": "f82cbf5f-7e44-48a1-a476-bd9eb3baee81",
+                "text": "Volume Quantity",
+                "type": "quantity",
+                "required": true
+            },
+            {
+                "id": "724c8a86-98b2-4798-a612-a8198461e9c5",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Temperature Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 0
+                    },
+                    {
+                        "url": "minValue"
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "F"
+                    }
+                ],
+                "linkId": "2cbc5951-7b93-48a3-bae2-7537fa4d80e6",
+                "text": "Temperature Quantity",
+                "type": "quantity",
+                "required": true
+            },
+            {
+                "id": "bc0f4548-b7eb-4647-a91d-914b73db6cd4",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Drops Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 0
+                    },
+                    {
+                        "url": "minValue"
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "drops"
+                    }
+                ],
+                "linkId": "b2498cfa-ecbe-41e3-a260-7a8ebc40aaf7",
+                "text": "Drops Quantity",
+                "type": "quantity",
+                "required": true
+            },
+            {
+                "id": "99824499-b26f-4c70-8587-adc475856899",
+                "extension": [
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-itemControl",
+                        "valueCodeableConcept": {
+                            "coding": [
+                                {
+                                    "system": "http://hl7.org/fhir/questionnaire-item-control",
+                                    "code": "quantity",
+                                    "display": "Quantity"
+                                }
+                            ],
+                            "text": "Quantity"
+                        }
+                    },
+                    {
+                        "url": "http://hl7.org/fhir/StructureDefinition/rendering-xhtml",
+                        "valueString": "<p><span style=\"font-family: Helvetica Neue; font-size: 16px\">Time Quantity</span></p>"
+                    },
+                    {
+                        "url": "maxValue"
+                    },
+                    {
+                        "url": "maxDecimalPlaces",
+                        "valueInteger": 0
+                    },
+                    {
+                        "url": "minValue"
+                    },
+                    {
+                        "url": "unitType",
+                        "valueString": "w"
+                    }
+                ],
+                "linkId": "85a01436-00c3-41d2-9cb9-fbaf01259c8e",
+                "text": "Time Quantity",
+                "type": "quantity",
+                "required": true
+            }
+        ]
+    },
+    "responses": [
+        {
+            "resourceType": "QuestionnaireResponse",
+            "questionnaire": "Questionnaire/432a402c-5265-406b-89e7-8933af905d27",
+            "status": "in-progress",
+            "extension": [
+                {
+                    "url": "Mobile/QuestionnaireResponse/PageIndex",
+                    "valueInteger": 3
+                }
+            ],
+            "meta": {
+                "profile": [
+                    "Quantity Form"
+                ]
+            },
+            "subject": {
+                "reference": "reference_01",
+                "display": "User Name"
+            },
+            "authored": "2023-04-25T16:36:55-04:00",
+            "item": [
+                {
+                    "linkId": "458c3a49-ac33-4ccc-8b1b-f7c8e522c5a2",
+                    "text": "Weight Quantity"
+                },
+                {
+                    "linkId": "d13ee409-3a98-4d36-abd8-5bafe4e9ac34",
+                    "text": "Length Quantity"
+                },
+                {
+                    "linkId": "f82cbf5f-7e44-48a1-a476-bd9eb3baee81",
+                    "text": "Volume Quantity",
+                    "answer": [
+                        {
+                            "valueInteger": 1
+                        }
+                    ]
+                }
+            ],
+            "text": {
+                "div": "<div>Quantity Form</div>",
+                "status": "generated"
+            },
+            "basedOn": [
+                {
+                    "reference": "ServiceRequest/111TestId"
+                }
+            ]
+        }
+    ]
+}
