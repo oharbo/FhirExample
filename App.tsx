@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
@@ -16,6 +9,13 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 
 import {
   Colors,
@@ -24,6 +24,9 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { ScreenNames } from "./src/constants";
+import QContainer from "./src/screens/QContainer";
+import QForm from "./src/screens/QForm";
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -55,44 +58,33 @@ function Section({children, title}: SectionProps): JSX.Element {
   );
 }
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  console.log(1111);
+
+const Stack = createNativeStackNavigator();
+
+function App(): React.ReactElement {
+  const isDarkMode: boolean = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
+
+      <Stack.Navigator>
+        <Stack.Screen
+          name={ScreenNames.QContainer}
+          component={QContainer}
+          // options={{title: ScreenTitleName.vehicleListScreen}}
+        />
+        <Stack.Screen
+          name={ScreenNames.QForm}
+          component={QForm}
+          // options={{title: ScreenTitleName.vehicleDetailScreen}}
+        />
+      </Stack.Navigator>
+
+    </NavigationContainer>
+
   );
 }
 
@@ -116,3 +108,11 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+// <SafeAreaView style={backgroundStyle}>
+//   <StatusBar
+//     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+//     backgroundColor={backgroundStyle.backgroundColor}
+//   />
+//
+// </SafeAreaView>
