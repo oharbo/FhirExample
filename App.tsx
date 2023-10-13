@@ -1,9 +1,8 @@
 import React from 'react';
 import { useColorScheme } from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
-
 
 import {
   NavigationContainer,

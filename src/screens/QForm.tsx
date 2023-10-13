@@ -11,20 +11,20 @@ import { connect } from 'react-redux';
 import { QSaveAction } from '../store/actions/actions';
 
 interface QFormI {
-  questionnaireData: Questionnaire;
+  QSaveAction: (data: Questionnaire[]) => void;
+  questionnaireData: Questionnaire | undefined;
 }
-// type TId = { id: string };
+
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
 
 const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
   // const route = useRoute<RouteProp<RootStackParamList, ScreenNames.QForm>>();
   // const { id }: TId = route.params;
 
   const [currentPage, setCurrentPage] = useState(0);
   const [responses, setResponses] = useState<Record<string, any>>({});
   const [totalQuestions, setTotalQuestions]: TTotalQuestions = useState(0);
-
 
   useEffect(() => {
     if (questionnaireData) {
@@ -34,7 +34,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
       }
     }
   }, [questionnaireData]);
-
 
   const handleNext = () => {
     if (currentPage < totalQuestions - 1) {
@@ -66,52 +65,52 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     }
   }, [responses]);
 
-  if (questionnaireData) {
-    const type = questionnaireData?.item?.[currentPage]?.type;
+  if (!questionnaireData) {
     return (
       <View>
-        {/*<Text>{qData.title}</Text>*/}
-        {currentPage < totalQuestions && (
-          <View>
-            <Text>{questionnaireData?.item?.[currentPage].text}</Text>
-            {type === 'display' && (
-              // Render a Display element
-              <Text>This is a display element.</Text>
-            )}
-            {type === 'quantity' && (
-              // Render a Quantity Input
-              // add input fields and validation for quantity here
-              <Text>Quantity Input</Text>
-            )}
-            {type === 'text' && (
-              // Render a Text Input
-              // add input fields for text here
-              <Text>Text Input</Text>
-            )}
-            {type === 'coding' && (
-              // Render a Single Choice (Radio and Button)
-              // create a radio button group or buttons for choices here
-              <Text>Single Choice (Radio and Button)</Text>
-            )}
-
-            {currentPage !== totalQuestions - 1 ? (
-              <Button title="Next" onPress={handleNext} />
-            ) : (
-              <Button title="Submit" onPress={() => {}} />
-            )}
-
-            <Button title="Previous" onPress={handlePrevious} />
-          </View>
-        )}
-
+        <Text>Error: Invalid Form Data</Text>
       </View>
     );
   }
+
+  const type = questionnaireData?.item?.[currentPage]?.type;
   return (
     <View>
-      <Text>Error: Invalid Form Data</Text>
+      {currentPage < totalQuestions && (
+        <View>
+          <Text>{questionnaireData?.item?.[currentPage].text}</Text>
+          {type === "display" && (
+            // Render a Display element
+            <Text>This is a display element.</Text>
+          )}
+          {type === "quantity" && (
+            // Render a Quantity Input
+            // add input fields and validation for quantity here
+            <Text>Quantity Input</Text>
+          )}
+          {type === "text" && (
+            // Render a Text Input
+            // add input fields for text here
+            <Text>Text Input</Text>
+          )}
+          {type === "coding" && (
+            // Render a Single Choice (Radio and Button)
+            // create a radio button group or buttons for choices here
+            <Text>Single Choice (Radio and Button)</Text>
+          )}
+
+          {currentPage !== totalQuestions - 1 ? (
+            <Button title="Next" onPress={handleNext} />
+          ) : (
+            <Button title="Submit" onPress={() => {
+            }} />
+          )}
+
+          <Button title="Previous" onPress={handlePrevious} />
+        </View>
+      )}
     </View>
-  )
+  );
 
 };
 const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
@@ -123,7 +122,7 @@ const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
 };
 
 const mapDispatchToProps = {
-  QSaveAction: QSaveAction,
+  QSaveAction: QSaveAction
 };
 
-export default connect(mapStateToProps, null)(QForm);
+export default connect(mapStateToProps, mapDispatchToProps)(QForm);

@@ -5,11 +5,11 @@ import { View, StyleSheet } from 'react-native';
 import { Questionnaire } from 'fhir/r5';
 import { connect } from 'react-redux';
 
-import { EndpT, QEndpoints } from '../constants';
-import { fetchAllData } from '../mocks/ApiMock';
 import QuestionnairesDropList from '../components/QuestionnairesDropList';
-import { QSaveAction } from '../store/actions/actions';
+import { EndpT, QEndpoints } from '../constants';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
+import { QSaveAction } from '../store/actions/actions';
+import { fetchAllData } from '../mocks/ApiMock';
 
 
 type TItemsQState = [Questionnaire[], React.Dispatch<React.SetStateAction<Questionnaire[]>>];

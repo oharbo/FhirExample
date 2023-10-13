@@ -31,7 +31,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
       if (item.id) {
         __DEV__ && console.log('onItemPress itemID:', item.id);
         QSelectedAction(item.id);
-        navigation.navigate(ScreenNames.QForm, { id: item.id });
+        navigation.navigate(ScreenNames.QForm);
       } else {
         __DEV__ && console.warn('Error: questionnaire ID missing');
       }
