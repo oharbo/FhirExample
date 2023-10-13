@@ -14,9 +14,7 @@ export enum ScreenNames {
 
 export type RootStackParamList = {
   [ScreenNames.QContainer]: undefined;
-  [ScreenNames.QForm]: {
-    id: string | undefined,
-  };
+  [ScreenNames.QForm]: undefined;
 };
 
 export type EndpT = 'Q1' | 'Q2' | 'Q3';
