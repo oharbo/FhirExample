@@ -61,7 +61,6 @@ const QContainer: React.FC<QContainerI> = ({QSaveAction, fhirQData}) => {
       __DEV__ && console.log("fetchData(QEndpoints)");
       fetchData(QEndpoints);
     }
-
   }, []);
 
   return (

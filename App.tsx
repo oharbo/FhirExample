@@ -32,7 +32,7 @@ function App(): React.ReactElement {
         <Stack.Screen
           name={ScreenNames.QForm}
           component={QForm}
-          options={{title: ''}}
+          options={{title: '', headerBackTitle: 'Exit'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

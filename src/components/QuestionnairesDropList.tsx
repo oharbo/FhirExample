@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList, StyleSheet, ListRenderItem } from 'react-native';
-import { TListData } from "../screens/QContainer";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList, ScreenNames } from "../constants";
-import { useNavigation } from "@react-navigation/native";
+import { TListData } from '../screens/QContainer';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList, ScreenNames } from '../constants';
+import { useNavigation } from '@react-navigation/native';
+import { QSelectedAction } from '../store/actions/actions';
+import { connect } from 'react-redux';
 
 interface DropdownProps {
   data: TListData[];
   header: string;
+  QSelectedAction: (id: string) => void;
 }
 
 type TIsOpenState = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 
-const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header }) => {
+const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelectedAction }) => {
   const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [isOpen, setIsOpen]: TIsOpenState = useState<boolean>(false);
@@ -25,8 +28,13 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header }) => {
 
   const _renderItemComponent: ListRenderItem<TListData> = ({ item }) =>  {
     const _onItemPress = (): void => {
-      console.log("onItemPress itemID:", item.id);
-      navigation.navigate(ScreenNames.QForm, { id: item.id });
+      if (item.id) {
+        __DEV__ && console.log('onItemPress itemID:', item.id);
+        QSelectedAction(item.id);
+        navigation.navigate(ScreenNames.QForm, { id: item.id });
+      } else {
+        __DEV__ && console.warn('Error: questionnaire ID missing');
+      }
     }
 
     return (
@@ -82,4 +90,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuestionnairesDropList;
+const mapDispatchToProps = {
+  QSelectedAction: QSelectedAction,
+};
+export default connect(null, mapDispatchToProps)(QuestionnairesDropList);

@@ -15,7 +15,7 @@ export enum ScreenNames {
 export type RootStackParamList = {
   [ScreenNames.QContainer]: undefined;
   [ScreenNames.QForm]: {
-    id: string | undefined,
+    id: string,
   };
 };
 
