@@ -29,7 +29,6 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
   const _renderItemComponent: ListRenderItem<TListData> = ({ item }) =>  {
     const _onItemPress = (): void => {
       if (item.id) {
-        __DEV__ && console.log('onItemPress itemID:', item.id);
         QSelectedAction(item.id);
         navigation.navigate(ScreenNames.QForm);
       } else {

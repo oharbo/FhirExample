@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-// import {type RouteProp, useRoute} from '@react-navigation/core';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {type StackNavigationProp} from '@react-navigation/stack';
 
-import { RootStackParamList, ScreenNames } from '../constants';
+import { RootStackParamList } from '../constants';
 import { Questionnaire } from 'fhir/r5';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
 import { connect } from 'react-redux';

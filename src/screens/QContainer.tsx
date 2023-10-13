@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
-// import {type StackNavigationProp} from '@react-navigation/stack';
 import { Questionnaire } from 'fhir/r5';
 import { connect } from 'react-redux';
 
@@ -24,7 +22,6 @@ interface QContainerI {
   QSaveAction: (data: Questionnaire[]) => void;
   fhirQData: FhirQStateI;
 }
-
 
 const QContainer: React.FC<QContainerI> = ({QSaveAction, fhirQData}) => {
 
