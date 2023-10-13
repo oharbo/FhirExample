@@ -1,15 +1,9 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { useColorScheme } from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { Provider } from 'react-redux';
+import store from './src/store/store';
+
 
 import {
   NavigationContainer,
@@ -17,57 +11,17 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import { RootStackParamList, ScreenNames, ScreenTitleName } from "./src/constants";
-import QContainer from "./src/screens/QContainer";
-import QForm from "./src/screens/QForm";
-
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
+import { RootStackParamList, ScreenNames, ScreenTitleName } from './src/constants';
+import QContainer from './src/screens/QContainer';
+import QForm from './src/screens/QForm';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function App(): React.ReactElement {
   const isDarkMode: boolean = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
 
   return (
+    <Provider store={store}>
     <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
       <Stack.Navigator>
         <Stack.Screen
@@ -78,35 +32,22 @@ function App(): React.ReactElement {
         <Stack.Screen
           name={ScreenNames.QForm}
           component={QForm}
-          // options={{title: ScreenTitleName.vehicleDetailScreen}}
+          options={{title: ''}}
         />
       </Stack.Navigator>
     </NavigationContainer>
-
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+
 
 export default App;
 
+
+// const backgroundStyle = {
+//   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+// };
 // <SafeAreaView style={backgroundStyle}>
 //   <StatusBar
 //     barStyle={isDarkMode ? 'light-content' : 'dark-content'}

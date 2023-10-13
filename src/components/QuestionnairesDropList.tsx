@@ -5,7 +5,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, ScreenNames } from "../constants";
 import { useNavigation } from "@react-navigation/native";
 
-// type QItemT
 interface DropdownProps {
   data: TListData[];
   header: string;
