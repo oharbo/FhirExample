@@ -42,15 +42,3 @@ function App(): React.ReactElement {
 
 
 export default App;
-
-
-// const backgroundStyle = {
-//   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-// };
-// <SafeAreaView style={backgroundStyle}>
-//   <StatusBar
-//     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-//     backgroundColor={backgroundStyle.backgroundColor}
-//   />
-//
-// </SafeAreaView>
