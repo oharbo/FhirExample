@@ -6,11 +6,18 @@ type QuantityItemProps = {
   item: QuestionnaireItem;
   onValidationChange: (isValid: boolean) => void;
   onValueChange: (value: number) => void;
+  savedValue: string | null
 };
+type TIsValid = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+type TVal = [string, React.Dispatch<React.SetStateAction<string>>];
 
-const QuantityItemComponent: React.FC<QuantityItemProps> = ({ item, onValidationChange, onValueChange }) => {
-  const [value, setValue] = useState('');
-  const [isValid, setIsValid] = useState(true);
+const QuantityItemComponent: React.FC<QuantityItemProps> = ({
+                                                              item,
+                                                              onValidationChange,
+                                                              onValueChange,
+                                                              savedValue }) => {
+  const [value, setValue]: TVal = useState(savedValue || '');
+  const [isValid, setIsValid]: TIsValid = useState(true);
 
   const { text, extension, required } = item;
   const vF: { [key: string]: number | string | undefined } = {};
@@ -22,15 +29,6 @@ const QuantityItemComponent: React.FC<QuantityItemProps> = ({ item, onValidation
       vF[ext.url] = ext.valueInteger || ext.valueString || ext.valueDecimal ;
     }
   })
-
-  useEffect(() => {
-    setValue('');
-    if (item?.required) {
-      setIsValid(false);
-    } else {
-      setIsValid(true);
-    }
-  }, [item]);
 
   const validateValue = (input: string) => {
     const val: RegExp = /^[0-9.]+$/;

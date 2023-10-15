@@ -22,7 +22,7 @@ interface QFormI {
 
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
 type TNxtBnt = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-type TResponses = [Record<string, any>, React.Dispatch<React.SetStateAction<Record<string, any>>>];
+type TResponses = [Record<string, string | number>, React.Dispatch<React.SetStateAction<Record<string, string | number>>>];
 
 const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const screenSize: ScreenSize = useScreenDimensions();
@@ -55,7 +55,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     } else {
-      // Handle going back to the dashboard
+      navigation.goBack();
     }
   };
 
@@ -111,6 +111,8 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 
   const key: string = `${currItem?.id || currentPage}`
   const progress: number = currentPage / totalQuestions;
+  const savedResponse = currItem.id ? responses[currItem?.id]?.toString() : null;
+  const prevBtnTitle = currentPage === 0 ? 'Exit' : 'Previous';
 
   return (
     <PageComponent
@@ -139,6 +141,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
                 item={currItem}
                 onValidationChange={handleValidationChange}
                 onValueChange={handleValueChange}
+                savedValue={savedResponse}
               />
             )}
             {type === 'text' && (
@@ -153,7 +156,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
             )}
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <Button title="Previous" onPress={handlePrevious} />
+            <Button title={prevBtnTitle} onPress={handlePrevious} />
 
             {
               isNextBtnVisible && (
