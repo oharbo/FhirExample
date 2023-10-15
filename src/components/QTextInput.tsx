@@ -5,13 +5,13 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 type QuantityItemProps = {
   item: QuestionnaireItem;
   onValidationChange: (isValid: boolean) => void;
-  onValueChange: (value: number) => void;
+  onValueChange: (value: string) => void;
   savedValue: string | null
 };
 type TIsValid = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 type TVal = [string, React.Dispatch<React.SetStateAction<string>>];
 
-const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
+const QTextInput: React.FC<QuantityItemProps> = ({
     item,
     onValidationChange,
     onValueChange,
@@ -19,46 +19,17 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
   const [value, setValue]: TVal = useState(savedValue || '');
   const [isValid, setIsValid]: TIsValid = useState(true);
 
-  const { text, extension, required } = item;
-  const vF: { [key: string]: number | string | undefined } = {};
-
-  extension?.forEach((ext): void => {
-    if ((ext.url !== undefined && !ext.url.startsWith('http')) &&
-        (ext.valueInteger !== undefined || ext.valueDecimal !== undefined || ext.valueString !== undefined)) {
-      // console.log(ext.url, (ext.valueInteger || ext.valueString || ext.valueDecimal));
-      vF[ext.url] = ext.valueInteger || ext.valueString || ext.valueDecimal ;
-    }
-  })
+  const { text, maxLength, required } = item;
 
   const validateValue = (input: string): boolean => {
-    const val: RegExp = /^[0-9.]+$/;
-    const numericValue: number = parseFloat(input);
-    if (isNaN(numericValue) || !val.test(input)) {
-      return false;
-    }
-
-    if (vF.maxDecimalPlaces !== undefined) {
-      const decimalPlaces = (numericValue.toString().split('.')[1] || '').length;
-      if (decimalPlaces > vF.maxDecimalPlaces) {
-        return false;
-      }
-    }
-
-    if (vF.maxValue !== undefined && numericValue > vF.maxValue) {
-      return false;
-    }
-
-    if (vF.minValue !== undefined && numericValue < vF.minValue) {
-      return false;
-    }
-
-    return true;
+    const val: string = input.trim();
+    return !(maxLength !== undefined && val.length < maxLength);
   };
 
   const handleValueChange = (input: string): void => {
     setValue(input);
-    const validationMessage = validateValue(input);
-    const numericValue: number = parseFloat(input);
+    const validationMessage: boolean = validateValue(input);
+    const val: string = input.trim();
 
     if (!validationMessage) {
       setIsValid(false); // todo check if still needed
@@ -66,7 +37,7 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
     } else {
       setIsValid(true);
       onValidationChange(true);
-      onValueChange(numericValue); // pass value above
+      onValueChange(val); // pass value above
     }
   };
 
@@ -74,9 +45,9 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
     <View style={styles.container}>
       <Text style={styles.displayText}>{text}</Text>
       <TextInput
-        keyboardType="numeric" // phone-pad
+        keyboardType="default"
         onChangeText={handleValueChange}
-        placeholder={`Enter a value in ${vF.unitType || 'units'}`}
+        // placeholder={} todo check in future
         style={styles.input}
         value={value}
       />
@@ -111,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QQuantityInputNumeric;
+export default QTextInput;

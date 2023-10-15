@@ -12,14 +12,15 @@ import { connect } from 'react-redux';
 import { QSaveAction } from '../store/actions/actions';
 import { PageComponent } from '../components/PageComponent';
 import QDisplay from '../components/QDisplay';
-import QuantityItemComponent from '../components/QQuantityInputNumeric';
+import QQuantityInputNumeric from '../components/QQuantityInputNumeric';
 import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
+import QTextInput from '../components/QTextInput';
 
 interface QFormI {
   QSaveAction: (data: Questionnaire[]) => void;
   questionnaireData: Questionnaire | undefined;
 }
-
+type TRes = string | number;
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
 type TNxtBnt = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 type TResponses = [Record<string, string | number>, React.Dispatch<React.SetStateAction<Record<string, string | number>>>];
@@ -59,16 +60,12 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     }
   };
 
-  const handleResponse = (questionId: string, response: any) => {
-    setResponses({ ...responses, [questionId]: response });
-  };
-
-  const handleValidationChange = (isValid: boolean) => {
+  const handleValidationChange = (isValid: boolean): void => {
     // console.log('handleValidationChange isValid:', isValid);
     setNextButtonEnabled(isValid);
   };
 
-  const handleValueChange = (value: any) => {
+  const handleValueChange = (value: TRes): void => {
     // console.log('+++ handleValueChange', value);
     // Array of:
     // {
@@ -111,7 +108,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 
   const key: string = `${currItem?.id || currentPage}`
   const progress: number = currentPage / totalQuestions;
-  const savedResponse = currItem.id ? responses[currItem?.id]?.toString() : null;
+  const savedResponse: string | null = currItem.id ? responses[currItem?.id]?.toString() : null;
   const prevBtnTitle = currentPage === 0 ? 'Exit' : 'Previous';
 
   return (
@@ -136,7 +133,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
               />
             )}
             {type === 'quantity' && (
-              <QuantityItemComponent
+              <QQuantityInputNumeric
                 key={key}
                 item={currItem}
                 onValidationChange={handleValidationChange}
@@ -145,9 +142,13 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
               />
             )}
             {type === 'text' && (
-              // Render a Text Input
-              // add input fields for text here
-              <Text>Text Input</Text>
+              <QTextInput
+                key={key}
+                item={currItem}
+                onValidationChange={handleValidationChange}
+                onValueChange={handleValueChange}
+                savedValue={savedResponse}
+              />
             )}
             {type === 'coding' && (
               // Render a Single Choice (Radio and Button)
