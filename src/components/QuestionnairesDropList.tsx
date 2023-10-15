@@ -19,7 +19,7 @@ type TIsOpenState = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelectedAction }) => {
   const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const [isOpen, setIsOpen]: TIsOpenState = useState<boolean>(false);
+  const [isOpen, setIsOpen]: TIsOpenState = useState(false);
 
   const _keyExtractor = (item: TListData, index: number) => `${item?.id}-${index}`;
 

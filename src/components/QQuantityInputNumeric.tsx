@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { QuestionnaireItem } from 'fhir/r5';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Text, TextInput, View } from 'react-native';
+import { styles } from '../styles/shared';
 
 type QuantityItemProps = {
   item: QuestionnaireItem;
-  onValidationChange: (isValid: boolean) => void;
-  onValueChange: (value: number) => void;
+  onValueChange: (value: number, isValid: boolean) => void;
   savedValue: string | null
 };
-type TIsValid = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 type TVal = [string, React.Dispatch<React.SetStateAction<string>>];
 
 const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
     item,
-    onValidationChange,
     onValueChange,
     savedValue }) => {
   const [value, setValue]: TVal = useState(savedValue || '');
-  const [isValid, setIsValid]: TIsValid = useState(true);
 
   const { text, extension, required } = item;
   const vF: { [key: string]: number | string | undefined } = {};
@@ -25,7 +22,6 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
   extension?.forEach((ext): void => {
     if ((ext.url !== undefined && !ext.url.startsWith('http')) &&
         (ext.valueInteger !== undefined || ext.valueDecimal !== undefined || ext.valueString !== undefined)) {
-      // console.log(ext.url, (ext.valueInteger || ext.valueString || ext.valueDecimal));
       vF[ext.url] = ext.valueInteger || ext.valueString || ext.valueDecimal ;
     }
   })
@@ -60,14 +56,7 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
     const validationMessage = validateValue(input);
     const numericValue: number = parseFloat(input);
 
-    if (!validationMessage) {
-      setIsValid(false); // todo check if still needed
-      onValidationChange(false);
-    } else {
-      setIsValid(true);
-      onValidationChange(true);
-      onValueChange(numericValue); // pass value above
-    }
+    onValueChange(numericValue, validationMessage);
   };
 
   return (
@@ -87,28 +76,5 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'lightgray',
-    borderRadius: 5,
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  displayText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  reqText: {
-    fontSize: 14,
-  },
-  input: {
-    backgroundColor: 'white',
-    fontSize: 16,
-    marginVertical: 16,
-    padding: 6,
-  },
-});
 
 export default QQuantityInputNumeric;
