@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, ListRenderItem } from 'react-native';
-import { TListData } from '../screens/QContainer';
+import { FlatList, ListRenderItem, StyleSheet, Text, Pressable, View } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList, ScreenNames } from '../constants';
-import { useNavigation } from '@react-navigation/native';
-import { QSelectedAction } from '../store/actions/actions';
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+
+import { QSelectedAction } from '../store/actions/actions';
+import { RootStackParamList, ScreenNames } from '../constants';
+import { TListData } from '../screens/QContainer';
 
 interface DropdownProps {
   data: TListData[];
@@ -20,11 +21,9 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
 
   const [isOpen, setIsOpen]: TIsOpenState = useState<boolean>(false);
 
-  const _keyExtractor = (item: TListData, index: number) => index.toString();
+  const _keyExtractor = (item: TListData, index: number) => `${item?.id}-${index}`;
 
-  const onPress = (): void => {
-    setIsOpen(!isOpen)
-  };
+  const onPress = (): void => setIsOpen(!isOpen);
 
   const _renderItemComponent: ListRenderItem<TListData> = ({ item }) =>  {
     const _onItemPress = (): void => {
@@ -37,20 +36,20 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
     }
 
     return (
-      <TouchableOpacity onPress={_onItemPress}>
+      <Pressable onPress={_onItemPress}>
         <View style={styles.item}>
           <Text>{item.title}</Text>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.header}>
+      <Pressable onPress={onPress} style={styles.header}>
         <Text style={styles.headerText}>{header}</Text>
         <Text style={styles.arrow}>{isOpen ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
+      </Pressable>
       {isOpen && (
         <FlatList
           data={data}

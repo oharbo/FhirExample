@@ -21,7 +21,6 @@ const fhirReducer: Reducer<FhirQStateI, ActionTypes> = (state = initialState, ac
         fhirQData: action.payload,
       };
     case QUESTIONNAIRE_SELECTED:
-      console.log(action);
       return {
         ...state,
         selectedId: action.payload,
