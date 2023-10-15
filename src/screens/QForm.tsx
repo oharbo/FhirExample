@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { type StackNavigationProp } from '@react-navigation/stack';
+// @ts-ignore (absent TS typing for the element; +don't want to add react-native-svg package
+import ProgressBar from 'react-native-progress/Bar';
 
 import { RootStackParamList } from '../constants';
 import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
@@ -11,6 +13,7 @@ import { QSaveAction } from '../store/actions/actions';
 import { PageComponent } from '../components/PageComponent';
 import QDisplay from '../components/QDisplay';
 import QuantityItemComponent from '../components/QQuantityInputNumeric';
+import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
 
 interface QFormI {
   QSaveAction: (data: Questionnaire[]) => void;
@@ -19,14 +22,15 @@ interface QFormI {
 
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
 type TNxtBnt = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
+type TResponses = [Record<string, any>, React.Dispatch<React.SetStateAction<Record<string, any>>>];
 
 const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
-  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
-  // const route = useRoute<RouteProp<RootStackParamList, ScreenNames.QForm>>();
-  // const { id }: TId = route.params;
+  const screenSize: ScreenSize = useScreenDimensions();
 
-  const [currentPage, setCurrentPage] = useState(0); // Todo types
-  const [responses, setResponses] = useState<Record<string, any>>({});
+  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const [currentPage, setCurrentPage]: TTotalQuestions = useState(0);
+  const [responses, setResponses]: TResponses = useState({});
   const [totalQuestions, setTotalQuestions]: TTotalQuestions = useState(0);
   const [nextButtonEnabled, setNextButtonEnabled]: TNxtBnt = useState(false);
 
@@ -81,7 +85,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 
   useEffect(() => {
     // Check if all questions have been answered
-    // PROGRESS BAR
     const answeredQuestions: string[] = Object.keys(responses);
     if (answeredQuestions.length === totalQuestions) {
       // Enable the submit button
@@ -107,6 +110,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const isSubmitBtnVisible: boolean = currentPage === totalQuestions - 1;
 
   const key: string = `${currItem?.id || currentPage}`
+  const progress: number = currentPage / totalQuestions;
 
   return (
     <PageComponent
@@ -115,31 +119,39 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
       style={styles.container}>
       {currentPage < totalQuestions && (
         <>
-          {type === 'display' && (
-            <QDisplay
-              key={key}
-              item={currItem}
+          <View>
+            <ProgressBar
+              progress={progress}
+              useNativeDriver
+              width={screenSize.width}
+              borderRadius={0}
+              borderWidth={0}
             />
-          )}
-          {type === 'quantity' && (
-            <QuantityItemComponent
-              key={key}
-              item={currItem}
-              onValidationChange={handleValidationChange}
-              onValueChange={handleValueChange}
-            />
-          )}
-          {type === 'text' && (
-            // Render a Text Input
-            // add input fields for text here
-            <Text>Text Input</Text>
-          )}
-          {type === 'coding' && (
-            // Render a Single Choice (Radio and Button)
-            // create a radio button group or buttons for choices here
-            <Text>Single Choice (Radio and Button)</Text>
-          )}
-
+            {type === 'display' && (
+              <QDisplay
+                key={key}
+                item={currItem}
+              />
+            )}
+            {type === 'quantity' && (
+              <QuantityItemComponent
+                key={key}
+                item={currItem}
+                onValidationChange={handleValidationChange}
+                onValueChange={handleValueChange}
+              />
+            )}
+            {type === 'text' && (
+              // Render a Text Input
+              // add input fields for text here
+              <Text>Text Input</Text>
+            )}
+            {type === 'coding' && (
+              // Render a Single Choice (Radio and Button)
+              // create a radio button group or buttons for choices here
+              <Text>Single Choice (Radio and Button)</Text>
+            )}
+          </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
             <Button title="Previous" onPress={handlePrevious} />
 
