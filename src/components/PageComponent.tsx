@@ -31,9 +31,9 @@ export const PageComponent: FC<PageComponentInterface> = ({
   style,
   useSafeAreaView = true,
 }: PageComponentInterface) => {
-  const {colors}: Theme = useTheme();
+  const { colors }: Theme = useTheme();
 
-  const bg: ViewStyle = {backgroundColor: colors?.card};
+  const bg: ViewStyle = { backgroundColor: colors?.card };
 
   if (useSafeAreaView) {
     return (
