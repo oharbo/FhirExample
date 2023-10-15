@@ -2,7 +2,6 @@ import React from 'react';
 import { QuestionnaireItem } from 'fhir/r5';
 import { View, Text, StyleSheet } from 'react-native';
 
-
 type QDisplayProps = {
   item: QuestionnaireItem;
 };

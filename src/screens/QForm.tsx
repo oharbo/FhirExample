@@ -5,16 +5,18 @@ import { type StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore (absent TS typing for the element; +don't want to add react-native-svg package
 import ProgressBar from 'react-native-progress/Bar';
 
-import { RootStackParamList } from '../constants';
-import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
-import { FhirQStateI } from '../store/reducers/fhir.reducer';
-import { connect } from 'react-redux';
-import { QSaveAction } from '../store/actions/actions';
-import { PageComponent } from '../components/PageComponent';
 import QDisplay from '../components/QDisplay';
 import QQuantityInputNumeric from '../components/QQuantityInputNumeric';
-import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
+import QSingleChoice from '../components/QSingleChoice';
 import QTextInput from '../components/QTextInput';
+import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
+import { FhirQStateI } from '../store/reducers/fhir.reducer';
+import { PageComponent } from '../components/PageComponent';
+import { QSaveAction } from '../store/actions/actions';
+import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
+import { RootStackParamList } from '../constants';
+import { connect } from 'react-redux';
+import { styles } from '../styles/shared';
 
 interface QFormI {
   QSaveAction: (data: Questionnaire[]) => void;
@@ -22,8 +24,7 @@ interface QFormI {
 }
 type TRes = string | number;
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
-type TNxtBnt = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
-type TResponses = [Record<string, string | number>, React.Dispatch<React.SetStateAction<Record<string, string | number>>>];
+type TResponses = [Record<string, Record<string, string | number | boolean>>, React.Dispatch<React.SetStateAction<Record<string, Record<string, string | number | boolean>>>>];
 
 const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const screenSize: ScreenSize = useScreenDimensions();
@@ -33,7 +34,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const [currentPage, setCurrentPage]: TTotalQuestions = useState(0);
   const [responses, setResponses]: TResponses = useState({});
   const [totalQuestions, setTotalQuestions]: TTotalQuestions = useState(0);
-  const [nextButtonEnabled, setNextButtonEnabled]: TNxtBnt = useState(false);
 
   useEffect(() => {
     if (questionnaireData) {
@@ -60,13 +60,8 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     }
   };
 
-  const handleValidationChange = (isValid: boolean): void => {
-    // console.log('handleValidationChange isValid:', isValid);
-    setNextButtonEnabled(isValid);
-  };
-
-  const handleValueChange = (value: TRes): void => {
-    // console.log('+++ handleValueChange', value);
+  const handleValueChange = (value: TRes, isValid: boolean): void => {
+    // todo learn how-to handle properly QuestionnaireResponse
     // Array of:
     // {
     //  linkId = currItem.id,
@@ -74,22 +69,28 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     //      value: <value> }
     // }
     if (currItem.id) {
-      responses[currItem.id] = value;
+      responses[currItem.id] = {
+        value: value,
+        isValid: isValid,
+      };
+    } else if (currItem?.linkId) {
+      responses[currItem.linkId] = {
+        value: value,
+        isValid: isValid,
+      };
     }
-    console.log('responses', responses);
     setResponses({ ...responses });
   };
 
-  useEffect(() => {
-    // Check if all questions have been answered
-    const answeredQuestions: string[] = Object.keys(responses);
-    if (answeredQuestions.length === totalQuestions) {
-      // Enable the submit button
-
-    } else {
-      // Disable the submit button
-    }
-  }, [responses]);
+  // useEffect(() => {
+  //   // Check if all questions have been answered
+  //   const answeredQuestions: string[] = Object.keys(responses);
+  //   if (answeredQuestions.length === totalQuestions) {
+  //     // Enable the submit button
+  //   } else {
+  //     // Disable the submit button
+  //   }
+  // }, [responses]);
 
   if (!questionnaireData || !questionnaireData?.item?.[currentPage]) {
     return (
@@ -101,21 +102,28 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 
   const type = questionnaireData?.item?.[currentPage]?.type;
   const currItem: QuestionnaireItem = questionnaireData?.item?.[currentPage];
-  const btnDisabled: boolean = !!(!nextButtonEnabled && currItem?.required);
 
   const isNextBtnVisible: boolean = currentPage !== totalQuestions - 1;
   const isSubmitBtnVisible: boolean = currentPage === totalQuestions - 1;
 
   const key: string = `${currItem?.id || currentPage}`
   const progress: number = currentPage / totalQuestions;
-  const savedResponse: string | null = currItem.id ? responses[currItem?.id]?.toString() : null;
+  const savedResponse: string | null =
+    currItem.id ? responses[currItem?.id]?.value?.toString() :
+      currItem.linkId ? responses[currItem?.linkId]?.value?.toString() : null;
+
   const prevBtnTitle = currentPage === 0 ? 'Exit' : 'Previous';
+
+  const isSavedResponseValid = currItem.id ?
+    responses[currItem?.id]?.isValid :
+      currItem.linkId ? responses[currItem?.linkId]?.isValid : null;
+  const enabled = isSavedResponseValid || !currItem?.required;
 
   return (
     <PageComponent
       useSafeAreaView
       edges={['bottom']}
-      style={styles.container}>
+      style={styles.containerForm}>
       {currentPage < totalQuestions && (
         <>
           <View>
@@ -136,7 +144,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
               <QQuantityInputNumeric
                 key={key}
                 item={currItem}
-                onValidationChange={handleValidationChange}
                 onValueChange={handleValueChange}
                 savedValue={savedResponse}
               />
@@ -145,15 +152,17 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
               <QTextInput
                 key={key}
                 item={currItem}
-                onValidationChange={handleValidationChange}
                 onValueChange={handleValueChange}
                 savedValue={savedResponse}
               />
             )}
             {type === 'coding' && (
-              // Render a Single Choice (Radio and Button)
-              // create a radio button group or buttons for choices here
-              <Text>Single Choice (Radio and Button)</Text>
+              <QSingleChoice
+                key={key}
+                item={currItem}
+                onValueChange={handleValueChange}
+                savedValue={savedResponse}
+              />
             )}
           </View>
           <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
@@ -161,7 +170,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 
             {
               isNextBtnVisible && (
-                <Button title="Next" disabled={btnDisabled} onPress={handleNext} />
+                <Button title="Next" disabled={!enabled} onPress={handleNext} />
               )}
             {
               isSubmitBtnVisible && (
@@ -175,12 +184,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-between'
-  }
-});
 const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
   const { selectedId, fhirQData }: FhirQStateI = state.fhirQuestionnaires;
   if (fhirQData) {
