@@ -1,6 +1,7 @@
 import React from 'react';
 import { QuestionnaireItem } from 'fhir/r5';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import { styles } from '../../styles/shared';
 
 type QDisplayProps = {
   item: QuestionnaireItem;
@@ -13,19 +14,5 @@ const QDisplay: React.FC<QDisplayProps> = ({ item }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'lightgray',
-    borderRadius: 5,
-    margin: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 20,
-  },
-  displayText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default QDisplay;

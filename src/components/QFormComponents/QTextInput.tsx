@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
 import { QuestionnaireItem } from 'fhir/r5';
 import { Text, TextInput, View } from 'react-native';
-import { styles } from '../styles/shared';
+import { styles } from '../../styles/shared';
 
 type QTextInputPropsI = {
   item: QuestionnaireItem;
   onValueChange: (value: string, isValid: boolean) => void;
-  savedValue: string | null
+  savedValue: string | null;
 };
 type TVal = [string, React.Dispatch<React.SetStateAction<string>>];
 
-const QTextInput: React.FC<QTextInputPropsI> = ({
-    item,
-    onValueChange,
-    savedValue }) => {
+const QTextInput: React.FC<QTextInputPropsI> = ({ item, onValueChange, savedValue }) => {
   const [value, setValue]: TVal = useState(savedValue || '');
   const { text, maxLength, required } = item;
 
   const validateValue = (input: string): boolean => {
     const val: string = input.trim();
     if (maxLength === undefined && val.length) return true;
-    return (maxLength !== undefined && val.length < maxLength);
+    return maxLength !== undefined && val.length < maxLength;
   };
 
   const handleValueChange = (input: string): void => {
@@ -41,10 +38,7 @@ const QTextInput: React.FC<QTextInputPropsI> = ({
         style={styles.input}
         value={value}
       />
-      {
-        !!required &&
-        <Text style={styles.reqText}>{'* Required'}</Text>
-      }
+      {!!required && <Text style={styles.reqText}>{'* Required'}</Text>}
     </View>
   );
 };

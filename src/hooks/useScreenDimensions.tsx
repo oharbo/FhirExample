@@ -30,6 +30,3 @@ const useScreenDimensions = (): ScreenSize => {
 };
 
 export default useScreenDimensions;
-
-
-

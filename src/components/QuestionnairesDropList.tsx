@@ -17,7 +17,8 @@ interface DropdownProps {
 type TIsOpenState = [boolean, React.Dispatch<React.SetStateAction<boolean>>];
 
 const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelectedAction }) => {
-  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation: StackNavigationProp<RootStackParamList> =
+    useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [isOpen, setIsOpen]: TIsOpenState = useState(false);
 
@@ -25,7 +26,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
 
   const onPress = (): void => setIsOpen(!isOpen);
 
-  const _renderItemComponent: ListRenderItem<TListData> = ({ item }) =>  {
+  const _renderItemComponent: ListRenderItem<TListData> = ({ item }) => {
     const _onItemPress = (): void => {
       if (item.id) {
         QSelectedAction(item.id);
@@ -33,7 +34,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
       } else {
         __DEV__ && console.warn('Error: questionnaire ID missing');
       }
-    }
+    };
 
     return (
       <Pressable onPress={_onItemPress}>
@@ -42,7 +43,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
         </View>
       </Pressable>
     );
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -51,11 +52,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
         <Text style={styles.arrow}>{isOpen ? '▲' : '▼'}</Text>
       </Pressable>
       {isOpen && (
-        <FlatList
-          data={data}
-          keyExtractor={_keyExtractor}
-          renderItem={_renderItemComponent}
-        />
+        <FlatList data={data} keyExtractor={_keyExtractor} renderItem={_renderItemComponent} />
       )}
     </View>
   );

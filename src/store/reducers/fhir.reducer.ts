@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 import { Questionnaire } from 'fhir/r5';
 
-import { ActionTypes, QUESTIONNAIRE_SAVE, QUESTIONNAIRE_SELECTED } from "../actions/actions";
+import { ActionTypes, QUESTIONNAIRE_SAVE, QUESTIONNAIRE_SELECTED } from '../actions/actions';
 
 export interface FhirQStateI {
   fhirQData: Questionnaire[] | null;
@@ -24,7 +24,7 @@ const fhirReducer: Reducer<FhirQStateI, ActionTypes> = (state = initialState, ac
       return {
         ...state,
         selectedId: action.payload,
-      }
+      };
     default:
       return state;
   }
