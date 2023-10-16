@@ -8,7 +8,7 @@ import { Text, View } from 'react-native';
 
 interface QDynamicComponentProps {
   type: string;
-  key: string;
+  keyP: string;
   item: QuestionnaireItem;
   handleValueChange: (value: string | number, isValid: boolean) => void;
   savedResponse: string | null;
@@ -16,18 +16,18 @@ interface QDynamicComponentProps {
 
 const QDynamicComponent: React.FC<QDynamicComponentProps> = ({
   type,
-  key,
+  keyP,
   item,
   handleValueChange,
   savedResponse,
 }) => {
   switch (type) {
     case 'display':
-      return <QDisplay key={key} item={item} />;
+      return <QDisplay key={keyP} item={item} />;
     case 'quantity':
       return (
         <QQuantityInputNumeric
-          key={key}
+          key={keyP}
           item={item}
           onValueChange={handleValueChange}
           savedValue={savedResponse}
@@ -36,7 +36,7 @@ const QDynamicComponent: React.FC<QDynamicComponentProps> = ({
     case 'text':
       return (
         <QTextInput
-          key={key}
+          key={keyP}
           item={item}
           onValueChange={handleValueChange}
           savedValue={savedResponse}
@@ -45,7 +45,7 @@ const QDynamicComponent: React.FC<QDynamicComponentProps> = ({
     case 'coding':
       return (
         <QSingleChoice
-          key={key}
+          key={keyP}
           item={item}
           onValueChange={handleValueChange}
           savedValue={savedResponse}

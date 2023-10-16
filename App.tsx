@@ -9,6 +9,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { RootStackParamList, ScreenNames, ScreenTitleName } from './src/constants';
 import QContainer from './src/screens/QContainer';
 import QForm from './src/screens/QForm';
+import QSummary from './src/screens/QSummary';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -28,6 +29,11 @@ function App(): React.ReactElement {
             name={ScreenNames.QForm}
             component={QForm}
             options={{ title: '', headerBackTitle: 'Exit' }}
+          />
+          <Stack.Screen
+            name={ScreenNames.QSummary}
+            component={QSummary}
+            options={{ title: ScreenTitleName.QSummary, headerBackVisible: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

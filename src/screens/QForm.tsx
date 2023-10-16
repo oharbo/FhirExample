@@ -8,33 +8,30 @@ import ProgressBar from 'react-native-progress/Bar';
 import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
 import { PageComponent } from '../components/Shared/PageComponent';
-import { QSaveAction } from '../store/actions/actions';
+import { QResponseSaveAction } from '../store/actions/actions';
 import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
-import { RootStackParamList } from '../constants';
+import { RootStackParamList, ScreenNames } from '../constants';
 import { connect } from 'react-redux';
 import { styles } from '../styles/shared';
 import QButtonGroup from '../components/QFormComponents/QButtonGroup';
 import QDynamicComponent from '../components/QFormComponents/QDynamicComponent';
+import { TResponses, TResponsesSt } from '../types';
 
 interface QFormI {
-  QSaveAction: (data: Questionnaire[]) => void;
+  QResponseSaveAction: (data: TResponses) => void;
   questionnaireData: Questionnaire | undefined;
 }
 type TRes = string | number;
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
-type TResponses = [
-  Record<string, Record<string, string | number | boolean>>,
-  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | number | boolean>>>>,
-];
 
-const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
+const QForm: React.FC<QFormI> = ({ questionnaireData, QResponseSaveAction }) => {
   const screenSize: ScreenSize = useScreenDimensions();
 
   const navigation: StackNavigationProp<RootStackParamList> =
     useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [currentPage, setCurrentPage]: TTotalQuestions = useState(0);
-  const [responses, setResponses]: TResponses = useState({});
+  const [responses, setResponses]: TResponsesSt = useState({});
   const [totalQuestions, setTotalQuestions]: TTotalQuestions = useState(0);
 
   useEffect(() => {
@@ -55,10 +52,8 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const handleSubmit = (): void => {
     if (currentPage === totalQuestions - 1) {
       // Handle form submission here
-      // todo:
-      //  - save answers to redux store;
-      //  - navigate to the QResults screen;
-      //  - create QForm component for Number: boolean
+      QResponseSaveAction(responses);
+      navigation.navigate(ScreenNames.QSummary);
     }
   };
 
@@ -106,7 +101,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const isNextBtnVisible: boolean = currentPage !== totalQuestions - 1;
   const isSubmitBtnVisible: boolean = currentPage === totalQuestions - 1;
 
-  const key: string = `${currItem?.id || currentPage}`;
+  const key: string = `${currItem?.id || currItem.linkId || currentPage}`;
   const progress: number = currentPage / totalQuestions;
   const savedResponse: string | null = currItem.id
     ? responses[currItem?.id]?.value?.toString()
@@ -137,7 +132,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
             />
             <QDynamicComponent
               type={type}
-              key={key}
+              keyP={key}
               item={currItem}
               handleValueChange={handleValueChange}
               savedResponse={savedResponse}
@@ -167,7 +162,7 @@ const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
 };
 
 const mapDispatchToProps = {
-  QSaveAction: QSaveAction,
+  QResponseSaveAction: QResponseSaveAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QForm);

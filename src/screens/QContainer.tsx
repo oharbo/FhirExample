@@ -49,7 +49,6 @@ const QContainer: React.FC<QContainerI> = ({ QSaveAction, fhirQData }) => {
       setItemsListData(listData);
     } else {
       // TODO Optional: get mock data in redux-saga
-      __DEV__ && console.log('fetchData(QEndpoints)');
       fetchData(QEndpoints);
     }
   }, []);
