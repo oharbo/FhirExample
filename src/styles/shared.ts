@@ -49,4 +49,7 @@ export const styles = StyleSheet.create({
     marginVertical: 16,
     padding: 6,
   },
+  summaryItem: {
+    marginBottom: 10,
+  },
 });
