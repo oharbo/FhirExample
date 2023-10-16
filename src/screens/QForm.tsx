@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { Fragment, useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { type StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore (absent TS typing for the element; +don't want to add react-native-svg package
 import ProgressBar from 'react-native-progress/Bar';
 
-import QDisplay from '../components/QDisplay';
-import QQuantityInputNumeric from '../components/QQuantityInputNumeric';
-import QSingleChoice from '../components/QSingleChoice';
-import QTextInput from '../components/QTextInput';
 import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
-import { PageComponent } from '../components/PageComponent';
+import { PageComponent } from '../components/Shared/PageComponent';
 import { QSaveAction } from '../store/actions/actions';
 import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
 import { RootStackParamList } from '../constants';
 import { connect } from 'react-redux';
 import { styles } from '../styles/shared';
+import QButtonGroup from '../components/QFormComponents/QButtonGroup';
+import QDynamicComponent from '../components/QFormComponents/QDynamicComponent';
 
 interface QFormI {
   QSaveAction: (data: Questionnaire[]) => void;
@@ -24,12 +22,16 @@ interface QFormI {
 }
 type TRes = string | number;
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
-type TResponses = [Record<string, Record<string, string | number | boolean>>, React.Dispatch<React.SetStateAction<Record<string, Record<string, string | number | boolean>>>>];
+type TResponses = [
+  Record<string, Record<string, string | number | boolean>>,
+  React.Dispatch<React.SetStateAction<Record<string, Record<string, string | number | boolean>>>>,
+];
 
 const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
   const screenSize: ScreenSize = useScreenDimensions();
 
-  const navigation: StackNavigationProp<RootStackParamList> = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const navigation: StackNavigationProp<RootStackParamList> =
+    useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const [currentPage, setCurrentPage]: TTotalQuestions = useState(0);
   const [responses, setResponses]: TResponses = useState({});
@@ -44,11 +46,19 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     }
   }, [questionnaireData]);
 
-  const handleNext = () => {
+  const handleNext = (): void => {
     if (currentPage < totalQuestions - 1) {
       setCurrentPage(currentPage + 1);
-    } else {
+    }
+  };
+
+  const handleSubmit = (): void => {
+    if (currentPage === totalQuestions - 1) {
       // Handle form submission here
+      // todo:
+      //  - save answers to redux store;
+      //  - navigate to the QResults screen;
+      //  - create QForm component for Number: boolean
     }
   };
 
@@ -82,16 +92,6 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     setResponses({ ...responses });
   };
 
-  // useEffect(() => {
-  //   // Check if all questions have been answered
-  //   const answeredQuestions: string[] = Object.keys(responses);
-  //   if (answeredQuestions.length === totalQuestions) {
-  //     // Enable the submit button
-  //   } else {
-  //     // Disable the submit button
-  //   }
-  // }, [responses]);
-
   if (!questionnaireData || !questionnaireData?.item?.[currentPage]) {
     return (
       <View>
@@ -100,32 +100,33 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     );
   }
 
-  const type = questionnaireData?.item?.[currentPage]?.type;
+  const type: QuestionnaireItem['type'] = questionnaireData?.item?.[currentPage]?.type;
   const currItem: QuestionnaireItem = questionnaireData?.item?.[currentPage];
 
   const isNextBtnVisible: boolean = currentPage !== totalQuestions - 1;
   const isSubmitBtnVisible: boolean = currentPage === totalQuestions - 1;
 
-  const key: string = `${currItem?.id || currentPage}`
+  const key: string = `${currItem?.id || currentPage}`;
   const progress: number = currentPage / totalQuestions;
-  const savedResponse: string | null =
-    currItem.id ? responses[currItem?.id]?.value?.toString() :
-      currItem.linkId ? responses[currItem?.linkId]?.value?.toString() : null;
+  const savedResponse: string | null = currItem.id
+    ? responses[currItem?.id]?.value?.toString()
+    : currItem.linkId
+    ? responses[currItem?.linkId]?.value?.toString()
+    : null;
 
   const prevBtnTitle = currentPage === 0 ? 'Exit' : 'Previous';
 
-  const isSavedResponseValid = currItem.id ?
-    responses[currItem?.id]?.isValid :
-      currItem.linkId ? responses[currItem?.linkId]?.isValid : null;
+  const isSavedResponseValid = currItem.id
+    ? responses[currItem?.id]?.isValid
+    : currItem.linkId
+    ? responses[currItem?.linkId]?.isValid
+    : null;
   const enabled = isSavedResponseValid || !currItem?.required;
 
   return (
-    <PageComponent
-      useSafeAreaView
-      edges={['bottom']}
-      style={styles.containerForm}>
+    <PageComponent useSafeAreaView edges={['bottom']} style={styles.containerForm}>
       {currentPage < totalQuestions && (
-        <>
+        <Fragment>
           <View>
             <ProgressBar
               progress={progress}
@@ -134,51 +135,24 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
               borderRadius={0}
               borderWidth={0}
             />
-            {type === 'display' && (
-              <QDisplay
-                key={key}
-                item={currItem}
-              />
-            )}
-            {type === 'quantity' && (
-              <QQuantityInputNumeric
-                key={key}
-                item={currItem}
-                onValueChange={handleValueChange}
-                savedValue={savedResponse}
-              />
-            )}
-            {type === 'text' && (
-              <QTextInput
-                key={key}
-                item={currItem}
-                onValueChange={handleValueChange}
-                savedValue={savedResponse}
-              />
-            )}
-            {type === 'coding' && (
-              <QSingleChoice
-                key={key}
-                item={currItem}
-                onValueChange={handleValueChange}
-                savedValue={savedResponse}
-              />
-            )}
+            <QDynamicComponent
+              type={type}
+              key={key}
+              item={currItem}
+              handleValueChange={handleValueChange}
+              savedResponse={savedResponse}
+            />
           </View>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <Button title={prevBtnTitle} onPress={handlePrevious} />
-
-            {
-              isNextBtnVisible && (
-                <Button title="Next" disabled={!enabled} onPress={handleNext} />
-              )}
-            {
-              isSubmitBtnVisible && (
-                <Button title="Submit" onPress={() => {
-                }} />
-              )}
-          </View>
-        </>
+          <QButtonGroup
+            disabled={!enabled}
+            handleNext={handleNext}
+            handlePrevious={handlePrevious}
+            handleSubmit={handleSubmit}
+            isNextBtnVisible={isNextBtnVisible}
+            isSubmitBtnVisible={isSubmitBtnVisible}
+            prevBtnTitle={prevBtnTitle}
+          />
+        </Fragment>
       )}
     </PageComponent>
   );
@@ -187,13 +161,13 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
 const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
   const { selectedId, fhirQData }: FhirQStateI = state.fhirQuestionnaires;
   if (fhirQData) {
-    const qData = fhirQData.find((q) => q.id === selectedId);
+    const qData = fhirQData.find(q => q.id === selectedId);
     return { questionnaireData: qData };
   }
 };
 
 const mapDispatchToProps = {
-  QSaveAction: QSaveAction
+  QSaveAction: QSaveAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QForm);

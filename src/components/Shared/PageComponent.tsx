@@ -1,10 +1,6 @@
-import React, {FC, ReactNode} from 'react';
-import {StyleSheet, View, ViewStyle} from 'react-native';
-import {
-  Edges,
-  SafeAreaView,
-  SafeAreaViewProps,
-} from 'react-native-safe-area-context';
+import React, { FC, ReactNode } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
+import { Edges, SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context';
 import { Theme, useTheme } from '@react-navigation/native';
 
 type TStyles = {
@@ -41,9 +37,7 @@ export const PageComponent: FC<PageComponentInterface> = ({
         style={[styles.flx1, bg, safeAreaStyles]}
         edges={edges}
         testID="page-component-view">
-        <View style={[styles.flx1, style]}>
-          {children}
-        </View>
+        <View style={[styles.flx1, style]}>{children}</View>
       </SafeAreaView>
     );
   }

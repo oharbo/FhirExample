@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   containerForm: {
     flex: 1,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   displayText: {
     fontSize: 16,

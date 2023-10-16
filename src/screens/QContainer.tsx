@@ -6,31 +6,28 @@ import { connect } from 'react-redux';
 import QuestionnairesDropList from '../components/QuestionnairesDropList';
 import { EndpT, QEndpoints } from '../constants';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
-import { PageComponent } from '../components/PageComponent';
+import { PageComponent } from '../components/Shared/PageComponent';
 import { QSaveAction } from '../store/actions/actions';
 import { fetchAllData } from '../mocks/ApiMock';
 
-
-// type TItemsQState = [Questionnaire[], React.Dispatch<React.SetStateAction<Questionnaire[]>>];
 type TTListDataState = [TListData[], React.Dispatch<React.SetStateAction<TListData[]>>];
 
 export type TListData = {
   title: string | undefined;
   id: string | undefined;
-}
+};
 
 interface QContainerI {
   fhirQData: FhirQStateI;
   QSaveAction: (data: Questionnaire[]) => void;
 }
 
-const QContainer: React.FC<QContainerI> = ({QSaveAction, fhirQData}) => {
+const QContainer: React.FC<QContainerI> = ({ QSaveAction, fhirQData }) => {
+  const [itemsListData, setItemsListData]: TTListDataState = useState<TListData[]>([]);
 
-  const [itemsListData, setItemsListData]: TTListDataState = useState<TListData[]>([])
-
-  const getTitleIdFromQData: (data: Questionnaire[]) => TListData[] = (data) => {
+  const getTitleIdFromQData: (data: Questionnaire[]) => TListData[] = data => {
     return data.map((item): TListData => ({ title: item.title, id: item.id }));
-  }
+  };
 
   useEffect((): void => {
     const fetchData = async (QEndpoints: EndpT[]): Promise<void> => {
@@ -58,15 +55,9 @@ const QContainer: React.FC<QContainerI> = ({QSaveAction, fhirQData}) => {
   }, []);
 
   return (
-    <PageComponent
-      edges={['bottom']}
-      useSafeAreaView
-    >
+    <PageComponent edges={['bottom']} useSafeAreaView>
       <View style={styles.container}>
-        <QuestionnairesDropList
-          data={itemsListData}
-          header={'Questionnaires'}
-        />
+        <QuestionnairesDropList data={itemsListData} header={'Questionnaires'} />
       </View>
     </PageComponent>
   );
