@@ -1,19 +1,15 @@
 import React from 'react';
 import { useColorScheme } from 'react-native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
 
-
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 
 import { RootStackParamList, ScreenNames, ScreenTitleName } from './src/constants';
 import QContainer from './src/screens/QContainer';
 import QForm from './src/screens/QForm';
+import QSummary from './src/screens/QSummary';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -22,36 +18,27 @@ function App(): React.ReactElement {
 
   return (
     <Provider store={store}>
-    <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
-      <Stack.Navigator>
-        <Stack.Screen
-          name={ScreenNames.QContainer}
-          component={QContainer}
-          options={{title: ScreenTitleName.QContainer}}
-        />
-        <Stack.Screen
-          name={ScreenNames.QForm}
-          component={QForm}
-          options={{title: '', headerBackTitle: 'Exit'}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer theme={isDarkMode ? DarkTheme : DefaultTheme}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name={ScreenNames.QContainer}
+            component={QContainer}
+            options={{ title: ScreenTitleName.QContainer }}
+          />
+          <Stack.Screen
+            name={ScreenNames.QForm}
+            component={QForm}
+            options={{ title: '', headerBackTitle: 'Exit' }}
+          />
+          <Stack.Screen
+            name={ScreenNames.QSummary}
+            component={QSummary}
+            options={{ title: ScreenTitleName.QSummary, headerBackVisible: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }
 
-
-
 export default App;
-
-
-// const backgroundStyle = {
-//   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-// };
-// <SafeAreaView style={backgroundStyle}>
-//   <StatusBar
-//     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-//     backgroundColor={backgroundStyle.backgroundColor}
-//   />
-//
-// </SafeAreaView>

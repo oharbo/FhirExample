@@ -1,15 +1,23 @@
 import { Reducer } from 'redux';
 import { Questionnaire } from 'fhir/r5';
 
-import { ActionTypes, QUESTIONNAIRE_SAVE, QUESTIONNAIRE_SELECTED } from "../actions/actions";
+import {
+  ActionTypes,
+  QRESPONSES_SAVE,
+  QUESTIONNAIRE_SAVE,
+  QUESTIONNAIRE_SELECTED,
+} from '../actions/actions';
+import { TResponses } from '../../types';
 
 export interface FhirQStateI {
   fhirQData: Questionnaire[] | null;
+  responses: TResponses | null;
   selectedId: string;
 }
 
 const initialState: FhirQStateI = {
   fhirQData: null,
+  responses: null,
   selectedId: '',
 };
 
@@ -21,11 +29,15 @@ const fhirReducer: Reducer<FhirQStateI, ActionTypes> = (state = initialState, ac
         fhirQData: action.payload,
       };
     case QUESTIONNAIRE_SELECTED:
-      console.log(action);
       return {
         ...state,
         selectedId: action.payload,
-      }
+      };
+    case QRESPONSES_SAVE:
+      return {
+        ...state,
+        responses: action.payload,
+      };
     default:
       return state;
   }

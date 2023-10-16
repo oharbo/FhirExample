@@ -39,6 +39,7 @@
                     }
                 ],
                 "required": true,
+                "linkId": "Q1-had-to-add-this-mandatory-field-because-not-sure-how-to-handle-this",
                 "text": "Your mobility TODAY",
                 "answerOption": [
                     {

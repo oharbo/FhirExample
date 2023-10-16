@@ -13,11 +13,10 @@ const QuestionnairesFromJSON: Record<EndpT, Questionnaire> = {
   Q1: Q1Q,
   Q2: Q2Q,
   Q3: Q3Q,
-}
+};
 
 // Simulate an asynchronous API request
 function mockAPICall(endpoint: EndpT): PromiseLike<Questionnaire> {
-
   return new Promise((resolve): void => {
     setTimeout((): void => {
       const res: Questionnaire = QuestionnairesFromJSON[endpoint];
@@ -29,7 +28,9 @@ function mockAPICall(endpoint: EndpT): PromiseLike<Questionnaire> {
 
 // Simulate multiple API calls and handle them with Promise.all
 export async function fetchAllData(endpoints: EndpT[]): Promise<Questionnaire[]> {
-  const apiCalls: PromiseLike<Questionnaire>[] = endpoints.map((endpoint: EndpT) => mockAPICall(endpoint));
+  const apiCalls: PromiseLike<Questionnaire>[] = endpoints.map((endpoint: EndpT) =>
+    mockAPICall(endpoint),
+  );
 
   try {
     const responses: Questionnaire[] = await Promise.all(apiCalls);

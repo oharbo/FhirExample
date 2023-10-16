@@ -1,30 +1,38 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-// import {type RouteProp, useRoute} from '@react-navigation/core';
+import React, { Fragment, useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {type StackNavigationProp} from '@react-navigation/stack';
+import { type StackNavigationProp } from '@react-navigation/stack';
+// @ts-ignore (absent TS typing for the element; +don't want to add react-native-svg package
+import ProgressBar from 'react-native-progress/Bar';
 
-import { RootStackParamList, ScreenNames } from '../constants';
-import { Questionnaire } from 'fhir/r5';
+import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
+import { PageComponent } from '../components/Shared/PageComponent';
+import { QResponseSaveAction } from '../store/actions/actions';
+import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
+import { RootStackParamList, ScreenNames } from '../constants';
 import { connect } from 'react-redux';
-import { QSaveAction } from '../store/actions/actions';
+import { styles } from '../styles/shared';
+import QButtonGroup from '../components/QFormComponents/QButtonGroup';
+import QDynamicComponent from '../components/QFormComponents/QDynamicComponent';
+import { TResponses, TResponsesSt } from '../types';
 
 interface QFormI {
-  questionnaireData: Questionnaire;
+  QResponseSaveAction: (data: TResponses) => void;
+  questionnaireData: Questionnaire | undefined;
 }
-// type TId = { id: string };
+type TRes = string | number;
 type TTotalQuestions = [number, React.Dispatch<React.SetStateAction<number>>];
 
-const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
-  // const route = useRoute<RouteProp<RootStackParamList, ScreenNames.QForm>>();
-  // const { id }: TId = route.params;
+const QForm: React.FC<QFormI> = ({ questionnaireData, QResponseSaveAction }) => {
+  const screenSize: ScreenSize = useScreenDimensions();
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [responses, setResponses] = useState<Record<string, any>>({});
+  const navigation: StackNavigationProp<RootStackParamList> =
+    useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const [currentPage, setCurrentPage]: TTotalQuestions = useState(0);
+  const [responses, setResponses]: TResponsesSt = useState({});
   const [totalQuestions, setTotalQuestions]: TTotalQuestions = useState(0);
-
 
   useEffect(() => {
     if (questionnaireData) {
@@ -35,12 +43,17 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     }
   }, [questionnaireData]);
 
-
-  const handleNext = () => {
+  const handleNext = (): void => {
     if (currentPage < totalQuestions - 1) {
       setCurrentPage(currentPage + 1);
-    } else {
+    }
+  };
+
+  const handleSubmit = (): void => {
+    if (currentPage === totalQuestions - 1) {
       // Handle form submission here
+      QResponseSaveAction(responses);
+      navigation.navigate(ScreenNames.QSummary);
     }
   };
 
@@ -48,82 +61,108 @@ const QForm: React.FC<QFormI> = ({ questionnaireData }) => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     } else {
-      // Handle going back to the dashboard
+      navigation.goBack();
     }
   };
 
-  const handleResponse = (questionId: string, response: any) => {
-    setResponses({ ...responses, [questionId]: response });
+  const handleValueChange = (value: TRes, isValid: boolean): void => {
+    // todo learn how-to handle properly QuestionnaireResponse
+    // Array of:
+    // {
+    //  linkId = currItem.id,
+    //  answer: {
+    //      value: <value> }
+    // }
+    if (currItem.id) {
+      responses[currItem.id] = {
+        value: value,
+        isValid: isValid,
+      };
+    } else if (currItem?.linkId) {
+      responses[currItem.linkId] = {
+        value: value,
+        isValid: isValid,
+      };
+    }
+    setResponses({ ...responses });
   };
 
-  useEffect(() => {
-    // Check if all questions have been answered
-    const answeredQuestions = Object.keys(responses);
-    if (answeredQuestions.length === totalQuestions) {
-      // Enable the submit button
-    } else {
-      // Disable the submit button
-    }
-  }, [responses]);
-
-  if (questionnaireData) {
-    const type = questionnaireData?.item?.[currentPage]?.type;
+  if (!questionnaireData || !questionnaireData?.item?.[currentPage]) {
     return (
       <View>
-        {/*<Text>{qData.title}</Text>*/}
-        {currentPage < totalQuestions && (
-          <View>
-            <Text>{questionnaireData?.item?.[currentPage].text}</Text>
-            {type === 'display' && (
-              // Render a Display element
-              <Text>This is a display element.</Text>
-            )}
-            {type === 'quantity' && (
-              // Render a Quantity Input
-              // add input fields and validation for quantity here
-              <Text>Quantity Input</Text>
-            )}
-            {type === 'text' && (
-              // Render a Text Input
-              // add input fields for text here
-              <Text>Text Input</Text>
-            )}
-            {type === 'coding' && (
-              // Render a Single Choice (Radio and Button)
-              // create a radio button group or buttons for choices here
-              <Text>Single Choice (Radio and Button)</Text>
-            )}
-
-            {currentPage !== totalQuestions - 1 ? (
-              <Button title="Next" onPress={handleNext} />
-            ) : (
-              <Button title="Submit" onPress={() => {}} />
-            )}
-
-            <Button title="Previous" onPress={handlePrevious} />
-          </View>
-        )}
-
+        <Text>Error: Invalid Form Data</Text>
       </View>
     );
   }
-  return (
-    <View>
-      <Text>Error: Invalid Form Data</Text>
-    </View>
-  )
 
+  const type: QuestionnaireItem['type'] = questionnaireData?.item?.[currentPage]?.type;
+  const currItem: QuestionnaireItem = questionnaireData?.item?.[currentPage];
+
+  const isNextBtnVisible: boolean = currentPage !== totalQuestions - 1;
+  const isSubmitBtnVisible: boolean = currentPage === totalQuestions - 1;
+
+  const key: string = `${currItem?.id || currItem.linkId || currentPage}`;
+  const progress: number = currentPage / totalQuestions;
+  const savedResponse: string | null = currItem.id
+    ? responses[currItem?.id]?.value?.toString()
+    : currItem.linkId
+    ? responses[currItem?.linkId]?.value?.toString()
+    : null;
+
+  const prevBtnTitle = currentPage === 0 ? 'Exit' : 'Previous';
+
+  const isSavedResponseValid = currItem.id
+    ? responses[currItem?.id]?.isValid
+    : currItem.linkId
+    ? responses[currItem?.linkId]?.isValid
+    : null;
+  const enabled = isSavedResponseValid || !currItem?.required;
+
+  return (
+    <PageComponent useSafeAreaView edges={['bottom']} style={styles.containerForm}>
+      {currentPage < totalQuestions && (
+        <Fragment>
+          <View>
+            <ProgressBar
+              progress={progress}
+              useNativeDriver
+              width={screenSize.width}
+              borderRadius={0}
+              borderWidth={0}
+            />
+            <QDynamicComponent
+              type={type}
+              keyP={key}
+              item={currItem}
+              handleValueChange={handleValueChange}
+              savedResponse={savedResponse}
+            />
+          </View>
+          <QButtonGroup
+            disabled={!enabled}
+            handleNext={handleNext}
+            handlePrevious={handlePrevious}
+            handleSubmit={handleSubmit}
+            isNextBtnVisible={isNextBtnVisible}
+            isSubmitBtnVisible={isSubmitBtnVisible}
+            prevBtnTitle={prevBtnTitle}
+          />
+        </Fragment>
+      )}
+    </PageComponent>
+  );
 };
+
 const mapStateToProps = (state: { fhirQuestionnaires: FhirQStateI }) => {
   const { selectedId, fhirQData }: FhirQStateI = state.fhirQuestionnaires;
   if (fhirQData) {
-    const qData = fhirQData.find((q) => q.id === selectedId);
+    const qData = fhirQData.find(q => q.id === selectedId);
     return { questionnaireData: qData };
   }
 };
 
 const mapDispatchToProps = {
-  QSaveAction: QSaveAction,
+  QResponseSaveAction: QResponseSaveAction,
 };
 
-export default connect(mapStateToProps, null)(QForm);
+export default connect(mapStateToProps, mapDispatchToProps)(QForm);
