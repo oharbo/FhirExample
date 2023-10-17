@@ -9,6 +9,7 @@ type QuantityItemProps = {
   savedValue: string | null;
 };
 type TVal = [string, React.Dispatch<React.SetStateAction<string>>];
+type TVF = { [key: string]: number | string | undefined };
 
 const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
   item,
@@ -18,7 +19,7 @@ const QQuantityInputNumeric: React.FC<QuantityItemProps> = ({
   const [value, setValue]: TVal = useState(savedValue || '');
 
   const { text, extension, required } = item;
-  const vF: { [key: string]: number | string | undefined } = {};
+  const vF: TVF = {};
 
   extension?.forEach((ext): void => {
     if (

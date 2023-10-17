@@ -57,7 +57,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData, QResponseSaveAction }) => 
     }
   };
 
-  const handlePrevious = () => {
+  const handlePrevious = (): void => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     } else {
@@ -116,7 +116,7 @@ const QForm: React.FC<QFormI> = ({ questionnaireData, QResponseSaveAction }) => 
     : currItem.linkId
     ? responses[currItem?.linkId]?.isValid
     : null;
-  const enabled = isSavedResponseValid || !currItem?.required;
+  const enabled: boolean = !!(isSavedResponseValid || !currItem?.required);
 
   return (
     <PageComponent useSafeAreaView edges={['bottom']} style={styles.containerForm}>
