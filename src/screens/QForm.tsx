@@ -4,18 +4,18 @@ import { useNavigation } from '@react-navigation/native';
 import { type StackNavigationProp } from '@react-navigation/stack';
 // @ts-ignore (absent TS typing for the element; +don't want to add react-native-svg package
 import ProgressBar from 'react-native-progress/Bar';
+import { connect } from 'react-redux';
 
+import QButtonGroup from '../components/QFormComponents/QButtonGroup';
+import QDynamicComponent from '../components/QFormComponents/QDynamicComponent';
 import useScreenDimensions, { ScreenSize } from '../hooks/useScreenDimensions';
 import { FhirQStateI } from '../store/reducers/fhir.reducer';
 import { PageComponent } from '../components/Shared/PageComponent';
 import { QResponseSaveAction } from '../store/actions/actions';
 import { Questionnaire, QuestionnaireItem } from 'fhir/r5';
 import { RootStackParamList, ScreenNames } from '../constants';
-import { connect } from 'react-redux';
-import { styles } from '../styles/shared';
-import QButtonGroup from '../components/QFormComponents/QButtonGroup';
-import QDynamicComponent from '../components/QFormComponents/QDynamicComponent';
 import { TResponses, TResponsesSt } from '../types';
+import { styles } from '../styles/shared';
 
 interface QFormI {
   QResponseSaveAction: (data: TResponses) => void;

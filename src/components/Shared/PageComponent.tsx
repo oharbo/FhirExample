@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Edges, SafeAreaView, SafeAreaViewProps } from 'react-native-safe-area-context';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import { Theme, useTheme } from '@react-navigation/native';
 
 type TStyles = {
