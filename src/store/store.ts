@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware, { SagaMiddleware } from 'redux-saga';
 import fhirReducer from './reducers/fhir.reducer';
 
-const middlewares = [];
+const middlewares: SagaMiddleware[] = [];
 
 const rootReducer = combineReducers({
   fhirQuestionnaires: fhirReducer,

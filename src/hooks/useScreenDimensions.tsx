@@ -13,12 +13,12 @@ const useScreenDimensions = (): ScreenSize => {
     height: Dimensions.get('window').height,
   });
 
-  const updateScreenSize = () => {
+  const updateScreenSize = (): void => {
     const { width, height } = Dimensions.get('window');
     setScreenSize({ width, height });
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     // Subscribe to the Dimensions change event
     Dimensions.addEventListener('change', updateScreenSize);
 

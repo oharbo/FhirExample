@@ -5,6 +5,7 @@ import QTextInput from './QTextInput';
 import QSingleChoice from './QSingleChoice';
 import { QuestionnaireItem } from 'fhir/r5';
 import { Text, View } from 'react-native';
+import { styles } from '../../styles/shared';
 
 interface QDynamicComponentProps {
   type: string;
@@ -53,8 +54,8 @@ const QDynamicComponent: React.FC<QDynamicComponentProps> = ({
       );
     default:
       return (
-        <View>
-          <Text>{`Error: Unknown "${type}" type`}</Text>
+        <View style={styles.container}>
+          <Text style={styles.displayText}>{`Error: Unknown "${type}" type`}</Text>
         </View>
       );
   }

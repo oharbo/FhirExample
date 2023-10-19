@@ -22,7 +22,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
 
   const [isOpen, setIsOpen]: TIsOpenState = useState(false);
 
-  const _keyExtractor = (item: TListData, index: number) => `${item?.id}-${index}`;
+  const _keyExtractor = (item: TListData, index: number): string => `${item?.id}-${index}`;
 
   const onPress = (): void => setIsOpen(!isOpen);
 
@@ -39,7 +39,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
     return (
       <Pressable onPress={_onItemPress}>
         <View style={styles.item}>
-          <Text>{item.title}</Text>
+          <Text style={styles.itemText}>{item.title}</Text>
         </View>
       </Pressable>
     );
@@ -61,7 +61,7 @@ const QuestionnairesDropList: React.FC<DropdownProps> = ({ data, header, QSelect
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderRadius: 5,
     margin: 10,
     overflow: 'hidden',
@@ -73,7 +73,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
   },
   headerText: {
+    fontSize: 16,
     fontWeight: 'bold',
+    flexShrink: 1,
+  },
+  itemText: {
+    fontSize: 16,
+    flexShrink: 1,
   },
   arrow: {
     fontSize: 20,
